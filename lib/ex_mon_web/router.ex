@@ -26,6 +26,12 @@ defmodule ExMonWeb.Router do
     end
   end
 
+  scope "/", ExMonWeb do
+    pipe_through :api
+
+    get "/", WelcomeController, :index
+  end
+
   # Enables the Swoosh mailbox preview in development.
   #
   # Note that preview only shows emails that were sent by the same
