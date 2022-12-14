@@ -15,6 +15,12 @@ defmodule ExMonWeb.TrainersController do
     |> handle_delete(conn)
   end
 
+  def show(conn, %{"id" => id}) do
+    id
+    |> ExMon.fetch_trainer()
+    |> handle_response(conn)
+  end
+
   defp handle_delete({:ok, _trainer}, conn) do
     conn
     |> put_status(:no_content)
