@@ -3,6 +3,32 @@ defmodule ExMonWeb.Controllers.TrainersControllerTest do
 
   alias ExMon.Trainer
 
+  describe "create/2" do
+    test "when all params are valid, creates a trainer", %{conn: conn} do
+      params = %{name: "vinicius", password: "123456"}
+
+      response =
+        conn
+        |> post(Routes.trainers_path(conn, :create, params))
+        |> json_response(:created)
+
+      assert %{"message" => "Trainer created", "trainer" => %{"id" => _id, "inserted_at" => _inserted_at, "name" => "vinicius"}} = response
+    end
+
+    test "when there is an error, returns the error", %{conn: conn} do
+      params = %{name: "vinicius", password: "123"}
+
+      response =
+        conn
+        |> post(Routes.trainers_path(conn, :create, params))
+        |> json_response(:bad_request)
+
+      expected_response = %{"message" => %{"password" => ["should be at least 6 character(s)"]}}
+
+      assert response == expected_response
+    end
+  end
+
   describe "show/2" do
     test "when there is a trainer with the given id, returns the trainer", %{conn: conn} do
       params = %{name: "vinicius", password: "123456"}
