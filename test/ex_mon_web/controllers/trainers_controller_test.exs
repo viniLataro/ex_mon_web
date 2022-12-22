@@ -29,6 +29,24 @@ defmodule ExMonWeb.Controllers.TrainersControllerTest do
     end
   end
 
+  describe "delete/2" do
+    test "when all params are valid, deletes a trainer", %{conn: conn} do
+      params = %{name: "vinicius", password: "123456"}
+
+      {:ok, %ExMon.Trainer{id: trainer_id}} = ExMon.create_trainer(params)
+
+      conn = delete(conn, Routes.trainers_path(conn, :delete, trainer_id))
+
+      assert response(conn, 204)
+    end
+
+    test "when there is an error, returns the error", %{conn: conn} do
+      conn = delete(conn, Routes.trainers_path(conn, :delete, "invalid_id"))
+
+      assert response(conn, 400)
+    end
+  end
+
   describe "show/2" do
     test "when there is a trainer with the given id, returns the trainer", %{conn: conn} do
       params = %{name: "vinicius", password: "123456"}
