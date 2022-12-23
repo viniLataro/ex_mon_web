@@ -7,12 +7,12 @@ defmodule ExMon.Pokemon do
 
   defstruct @keys
 
-  def build(%{"id" => id, "name" => name, "weight" => weight, "types" => types}) do
+  def build(params) do
     %__MODULE__{
-      id: id,
-      name: name,
-      weight: weight,
-      types: parse_types(types)
+      id: params["id"],
+      name: params["name"],
+      weight: params["weight"],
+      types: parse_types(params["types"])
     }
   end
 
