@@ -23,5 +23,18 @@ defmodule ExMon.Trainer.Pokemon.CreateTest do
 
       assert {:ok, %ExMon.Trainer.Pokemon{name: "pikachu", nickname: "pika"}} = response
     end
+
+    test "when there are invalid params, returns the error" do
+
+      mock(fn %{method: :get, url: @base_url <> "invalid_name"} ->
+        %Tesla.Env{status: 404}
+      end)
+
+      params = %{"name" => "invalid_name", "nickname" => "pika", "trainer_id" => "invalid_id"}
+
+      response = ExMon.Trainer.Pokemon.Create.call(params)
+
+      assert {:error, "Pokemon not found!"} == response
+    end
   end
 end
