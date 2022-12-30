@@ -1,5 +1,6 @@
 defmodule ExMonWeb.Controllers.TrainersControllerTest do
   use ExMonWeb.ConnCase
+  import ExMonWeb.Auth.Guardian
 
   alias ExMon.Trainer
 
@@ -30,6 +31,15 @@ defmodule ExMonWeb.Controllers.TrainersControllerTest do
   end
 
   describe "delete/2" do
+    setup %{conn: conn} do
+      params = %{name: "vinicius", password: "123456"}
+      {:ok, trainer} = ExMon.create_trainer(params)
+      {:ok, token, _claims} = encode_and_sign(trainer)
+
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+      {:ok, conn: conn}
+    end
+    
     test "when all params are valid, deletes a trainer", %{conn: conn} do
       params = %{name: "vinicius", password: "123456"}
 
@@ -48,6 +58,15 @@ defmodule ExMonWeb.Controllers.TrainersControllerTest do
   end
 
   describe "show/2" do
+    setup %{conn: conn} do
+      params = %{name: "vinicius", password: "123456"}
+      {:ok, trainer} = ExMon.create_trainer(params)
+      {:ok, token, _claims} = encode_and_sign(trainer)
+
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+      {:ok, conn: conn}
+    end
+
     test "when there is a trainer with the given id, returns the trainer", %{conn: conn} do
       params = %{name: "vinicius", password: "123456"}
 

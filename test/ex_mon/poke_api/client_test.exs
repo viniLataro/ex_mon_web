@@ -16,7 +16,7 @@ defmodule ExMon.PokeApi.ClientTest do
 
       response = Client.get_pokemon("pikachu")
 
-      expected_response = {:ok, %{"name" => "pikachu", "types" => ["electric"], "weight" => 60}}
+      expected_response = {:ok, %{"name" => "pikachu", "types" => [%{"name" => "electric"}], "weight" => 60}}
 
       assert response == expected_response
     end
